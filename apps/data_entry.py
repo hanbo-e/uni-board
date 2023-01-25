@@ -48,9 +48,10 @@ layout = html.Div(style={'textAlign': 'center'}, children=[
         
         html.Div(children=[html.Label('Main'),
             dcc.Dropdown(
-            id='main-dropdown', placeholder='Who is the main supervisor?',
+            id='main-status-dropdown', placeholder='Who is the main supervisor?',
             options=[{'label': 'First Supervisor', 'value': 'First'}, {'label': 'Second Supervisor', 'value': 'Second'}],
-            #style={'width': '200px', 'display':'flex', 'align-items':'center'}
+            persistence=True,
+            persistence_type='session'
         )]),             
         
         

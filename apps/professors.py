@@ -28,7 +28,8 @@ layout = html.Div([
         html.Div(dcc.Dropdown(
             id='professor-dropdown', value='Prof. B. F. Skinner', clearable=False,
             persistence=True, persistence_type='session', #this controls if the last info clicked will stay the same
-            options=[{'label': x, 'value': x} for x in sorted(df.First_Supervisor.unique())]
+            options=[{'label': x, 'value': x} for x in sorted(df.First_Supervisor.unique())],
+            searchable=True
         ), className='six columns'),
         
     ], className='row'),

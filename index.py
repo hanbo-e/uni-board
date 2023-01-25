@@ -16,7 +16,7 @@ from app import app
 from app import server
 
 # Connect to your app pages
-from apps import professors, data_entry, db_manager
+from apps import professors, data_entry, db_manager, test
 
 
 app.layout = html.Div([
@@ -24,7 +24,8 @@ app.layout = html.Div([
     html.Div([
         dcc.Link('Thesis Supervision | ', href='/apps/professors'),
         dcc.Link(' Data Entry Page | ', href='/apps/data_entry'),
-        dcc.Link(' Database Viewer', href='/apps/db_manager')
+        dcc.Link(' Database Viewer', href='/apps/db_manager'),
+        dcc.Link(' Test Ground', href='/apps/test')
     ], className="row"),
     html.Div(id='page-content', children=[])
 ])
@@ -40,6 +41,8 @@ def display_page(pathname):
         return data_entry.layout
     if pathname == '/apps/db_manager':
         return db_manager.layout
+    if pathname == '/apps/test':
+        return test.layout
     else:
         return professors.layout
 
