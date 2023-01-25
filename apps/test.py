@@ -35,7 +35,7 @@ layout = html.Div([
 ])
 
 @app.callback(Output('output', 'children'), 
-              [Input('submit-button', 'n_clicks')], 
+              [Input('submit-button', 'n_clicks')], #mutliple inputs, outputs need to be in a list
               [State('dropdown1', 'value'), 
                State('dropdown2', 'value'), 
                State('input', 'value')],
