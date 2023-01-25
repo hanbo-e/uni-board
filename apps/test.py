@@ -38,7 +38,9 @@ layout = html.Div([
               [Input('submit-button', 'n_clicks')], 
               [State('dropdown1', 'value'), 
                State('dropdown2', 'value'), 
-               State('input', 'value')])
+               State('input', 'value')],
+              prevent_initial_call=True #last thing added
+              )
 def update_output(n_clicks, dropdown1_value, dropdown2_value, input_value):
     return f'Dropdown 1: {dropdown1_value}, Dropdown 2: {dropdown2_value}, Input: {input_value}'
 
