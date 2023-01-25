@@ -2,8 +2,9 @@
 """
 Created on Tue Jan 24 08:30:41 2023
 
-@author: eevae
-Based on code from here: https://github.com/Coding-with-Adam/Dash-by-Plotly/tree/master/Deploy_App_to_Web/Multipage_App
+@author: hanbo-e
+Based on helpful code and tutorial from here:
+https://github.com/Coding-with-Adam/Dash-by-Plotly/tree/master/Deploy_App_to_Web/Multipage_App
 """
 
 import dash_core_components as dcc
