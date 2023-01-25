@@ -23,6 +23,7 @@ from app import app
 from dash.exceptions import PreventUpdate
 import datetime
 
+from apps.db_manager import df
 
 
 layout = html.Div(style={'textAlign': 'center'}, children=[
@@ -38,10 +39,21 @@ layout = html.Div(style={'textAlign': 'center'}, children=[
             html.Label('Second Supervisor'),
             dcc.Input(type='text', id='second-supervisor-input')
         ]),
-        html.Div(children=[
-            html.Label('Main Status'),
-            dcc.Input(type='text', id='main-status-input')
-        ]),
+        
+        # html.Div(children=[
+        #     html.Label('Main Status'),
+        #     dcc.Input(type='text', id='main-status-input', placeholder='Who is the main supervisor?')
+            
+        # ]),
+        
+        html.Div(children=[html.Label('Main'),
+            dcc.Dropdown(
+            id='main-dropdown', placeholder='Who is the main supervisor?',
+            options=[{'label': 'First Supervisor', 'value': 'First'}, {'label': 'Second Supervisor', 'value': 'Second'}],
+            #style={'width': '200px', 'display':'flex', 'align-items':'center'}
+        )]),             
+        
+        
         html.Div(children=[
             html.Label('Student Name'),
             dcc.Input(type='text', id='student-name-input')
@@ -52,7 +64,8 @@ layout = html.Div(style={'textAlign': 'center'}, children=[
         ]),
         html.Div(children=[
             html.Label('Colloquium Date'),
-            dcc.Input(type='text', id='colloquium-date-input', placeholder = 'yyyy-mm-dd')
+            dcc.Input(type='text', id='colloquium-date-input', placeholder = 'yyyy-mm-dd',
+                      pattern = '^(20[0-9][0-9])-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$')
         ]),
         html.Button('Submit', type='submit', id='submit-button'),
         html.Div(id = 'error-message')
