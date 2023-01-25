@@ -14,47 +14,67 @@ Created on Tue Jan 24 08:34:31 2023
 
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import plotly.express as px
 import pandas as pd
 import pathlib
 from app import app
 
-layout = html.Div([
-    html.H1('Data Entry Page', style={'textAlign': 'center'}),
+from dash.exceptions import PreventUpdate
+import datetime
 
-    html.Div([
-        html.Div([
-            html.H3('First Supervisor'),
-            dcc.Input(id='first-supervisor-input', type='text', placeholder='Enter First Supervisor')
-        ], className='six columns', style={'text-align': 'center'}),
 
-        html.Div([
-            html.H3('Second Supervisor'),
-            dcc.Input(id='second-supervisor-input', type='text', placeholder='Enter Second Supervisor')
-        ], className='six columns', style={'text-align': 'center'}),
-    ], className='row'),
 
-    html.Div([
-        html.Div([
-            html.H3('Main Status'),
-            dcc.Input(id='main-status-input', type='text', placeholder='Enter Main Status')
-        ], className='six columns', style={'text-align': 'center'}),
-
-        html.Div([
-            html.H3('Student Name'),
-            dcc.Input(id='student-name-input', type='text', placeholder='Enter Student Name')
-        ], className='six columns', style={'text-align': 'center'}),
-    ], className='row'),
+layout = html.Div(style={'textAlign': 'center'}, children=[
     
-    html.Div([
-        html.Div([
-            html.H3('Student Gender'),
-            dcc.Input(id='gender-input', type='text', placeholder='Enter Gender')
-        ], className='six columns', style={'text-align': 'center'}),
-        html.Div([
-            html.H3('Colloquium Date'),
-            dcc.Input(id='colloquium-date-input', type='text', placeholder='Enter Colloquium Date')
-        ], className='six columns', style={'text-align': 'center'}),        
-        ], className='row')
+    html.H1('Data Entry Page', style={'textAlign': 'center'}),
+    
+    html.Form(children=[
+        html.Div(children=[
+            html.Label('First Supervisor'),
+            dcc.Input(type='text', id='first-supervisor-input')
+        ]),
+        html.Div(children=[
+            html.Label('Second Supervisor'),
+            dcc.Input(type='text', id='second-supervisor-input')
+        ]),
+        html.Div(children=[
+            html.Label('Main Status'),
+            dcc.Input(type='text', id='main-status-input')
+        ]),
+        html.Div(children=[
+            html.Label('Student Name'),
+            dcc.Input(type='text', id='student-name-input')
+        ]),
+        html.Div(children=[
+            html.Label('Student Gender'),
+            dcc.Input(type='text', id='student-gender-input')
+        ]),
+        html.Div(children=[
+            html.Label('Colloquium Date'),
+            dcc.Input(type='text', id='colloquium-date-input', placeholder = 'yyyy-mm-dd')
+        ]),
+        html.Button('Submit', type='submit', id='submit-button'),
+        html.Div(id = 'error-message')
     ])
+])
+
+# Create a callback function to check the format of the 'colloquium-date' input
+@app.callback(Output('error-message', 'children'),
+              [Input('submit-button', 'n_clicks')],
+              [State('colloquium-date-input', 'value')])
+def validate_colloquium_date(n_clicks, colloquium_date):
+    if n_clicks is None:
+        raise PreventUpdate
+    else:
+        try:
+            datetime.strptime(colloquium_date, '%Y-%m-%d')
+            return ''
+        except ValueError:
+            return 'Incorrect Format'
+
+# Create a callback function to update the submit button's label and disable the button if there is an error
+@app.callback(Output('submit-button', 'disabled'),
+              [Input('error-message', 'children')])
+def update_submit_button(error_message):
+    return True if error_message else False
