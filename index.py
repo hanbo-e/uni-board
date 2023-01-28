@@ -24,7 +24,7 @@ app.layout = html.Div([
     html.Div([
         dcc.Link('Thesis Supervision | ', href='/apps/professors'),
         dcc.Link(' Data Entry Page | ', href='/apps/data_entry'),
-        dcc.Link(' Database Viewer', href='/apps/db_manager'),
+        dcc.Link(' Database Viewer | ', href='/apps/db_manager'),
         dcc.Link(' Test Ground', href='/apps/test')
     ], className="row"),
     html.Div(id='page-content', children=[])
