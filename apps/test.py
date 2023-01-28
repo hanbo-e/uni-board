@@ -34,15 +34,15 @@ layout = html.Div([
     html.Div(id='output')
 ])
 
-@app.callback(Output('output', 'children'), 
-              [Input('submit-button', 'n_clicks')], #mutliple inputs, outputs need to be in a list
-              [State('dropdown1', 'value'), 
-               State('dropdown2', 'value'), 
-               State('input', 'value')],
-              prevent_initial_call=True #last thing added
-              )
-def update_output(n_clicks, dropdown1_value, dropdown2_value, input_value):
-    return f'Dropdown 1: {dropdown1_value}, Dropdown 2: {dropdown2_value}, Input: {input_value}'
+# @app.callback(Output('output', 'children'), 
+#               [Input('submit-button', 'n_clicks')], #mutliple inputs, outputs need to be in a list
+#               [State('dropdown1', 'value'), 
+#                State('dropdown2', 'value'), 
+#                State('input', 'value')],
+#               prevent_initial_call=True #last thing added
+#               )
+# def update_output(n_clicks, dropdown1_value, dropdown2_value, input_value):
+#     return f'Dropdown 1: {dropdown1_value}, Dropdown 2: {dropdown2_value}, Input: {input_value}'
 
 # import sqlite3
 
