@@ -27,8 +27,10 @@ from apps.db_manager import df
 
 import sqlite3
 
-# Connect to the database (or create it if it doesn't exist)
-conn = sqlite3.connect('mydatabase.db')
+# Connect to the database
+PATH = pathlib.Path(__file__).parent #method to use when run as imported module
+DATA_PATH = PATH.joinpath("../datasets/mydatabase.db").resolve()
+conn = sqlite3.connect(DATA_PATH)
 
 layout = html.Div([
     html.H1('Supervision Data Entry'),
@@ -79,7 +81,8 @@ layout = html.Div([
     
 ])
 
-@app.callback(Output('output', 'children'), 
+@app.callback(
+    Output('output', 'children'), 
               [Input('submit-button', 'n_clicks')],
               [State('first_supervisor_input', 'value'), 
                 State('second_supervisor_input', 'value'), 
@@ -122,6 +125,29 @@ Semester: {semester}"""
 
 # # Create the table
 # conn.execute('''CREATE TABLE mytable (input1 text, input2 text, input3 text)''')
+
+@app.callback(
+    Output('submit-button', 'disabled'), 
+              [Input('submit-button', 'n_clicks')],
+              [State('first_supervisor_input', 'value'), 
+                State('second_supervisor_input', 'value'), 
+                State('main_supervisor_dropdown', 'value'),
+                State('student_name_input', 'value'),
+                State('gender_dropdown', 'value'),
+                State('colloquium_date_input', 'value')
+                ],
+              prevent_initial_call=True
+)
+def save_to_db(input1, input2, input3):
+    # Save the input values to the database
+    conn.execute(f""""INSERT INTO mytable (input1,
+                                           input2,
+                                           input3)
+                 VALUES ('{input1}',
+                         '{input2}',
+                         '{input3}')""")
+    conn.commit()
+    return False
 
 # @app.callback(
 #     Output('submit-button', 'disabled'),
