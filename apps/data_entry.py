@@ -81,6 +81,8 @@ layout = html.Div([
     
 ])
 
+semester = ''
+
 @app.callback(
     Output('output', 'children'), 
               [Input('submit-button', 'n_clicks')],
@@ -101,7 +103,7 @@ def update_output_data(n_clicks,
                         gender_value,
                         colloquium_value):
     date = datetime.strptime(colloquium_value, '%Y-%m-%d')
-    semester = ''
+    #semester = ''
     if date.month >= 4 and date.month <= 9:
         semester = f'Summer Semester {date.year}'
     else:
@@ -138,14 +140,31 @@ Semester: {semester}"""
                 ],
               prevent_initial_call=True
 )
-def save_to_db(input1, input2, input3):
+def save_to_db(n_clicks,
+                        first_supervisor_value, 
+                        second_supervisor_value,
+                        main_value,
+                        name_value,
+                        gender_value,
+                        colloquium_value        
+        ):
     # Save the input values to the database
-    conn.execute(f""""INSERT INTO mytable (input1,
-                                           input2,
-                                           input3)
-                 VALUES ('{input1}',
-                         '{input2}',
-                         '{input3}')""")
+    conn.execute(f""""INSERT INTO mytable (First_Supervisor,
+                                           Second_Supervisor,
+                                           Main_Status,
+                                           Student_Name,
+                                           Gender,
+                                           Colloquium_Date,
+                                           Semester)
+                 VALUES ('{first_supervisor_value}',
+                         '{second_supervisor_value}',
+                         '{main_value}',
+                         '{name_value}',
+                         '{gender_value}',
+                         '{colloquium_value}',
+                         '{semester}'
+                         
+                         )""")
     conn.commit()
     return False
 
