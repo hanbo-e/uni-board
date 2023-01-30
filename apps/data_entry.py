@@ -12,22 +12,10 @@ from sqlalchemy.orm import sessionmaker
 
 import datetime
 
-#app = dash.Dash(__name__)
+
 from apps.db_manager import df, ENGINE, Session, session
+#from apps.professors import df, ENGINE, Session, session
 from app import app
-
-# ENGINE = create_engine('sqlite:///mydatabase.db')
-# Session = sessionmaker(bind=ENGINE)
-# session = Session()
-
-# for checking db connection problems
-#connection = ENGINE.connect()
-#print(f"Engine url is: {ENGINE.url}")
-
-# as this is a small data set I will load the data once into a df instead of querying in callbacks
-#df = pd.read_sql_table('mytable', ENGINE)
-
-
 
 layout = html.Div([ 
     dash_table.DataTable(
@@ -83,42 +71,3 @@ def add_row(n_clicks, value1, value2, value3, value4, value5, value6, value7):
         session.commit()
         print('went into add row function')
     return df.tail(10).to_dict("rows")
-
-# def validate_inputs(value1, value2, value3, value4, value5, value6, value7):
-#     if not all([value1, value2, value3, value4, value5, value6, value7]):
-#         return False, "All fields are required."
-#     try:
-#         datetime.datetime.strptime(value7, '%Y-%m-%d')
-#     except ValueError:
-#         return False, "Invalid date format, it should be YYYY-MM-DD."
-#     return True, ""
-
-# @app.callback(
-#     Output('table', 'data'),
-#     [Input('add-button', 'n_clicks')],
-#     [State('input-box-1', 'value'),
-#      State('input-box-2', 'value'),
-#      State('input-box-3', 'value'),
-#      State('input-box-4', 'value'),
-#      State('input-box-5', 'value'),
-#      State('input-box-6', 'value'),
-#      State('input-box-7', 'value')]
-# )
-# def add_row(n_clicks, value1, value2, value3, value4, value5, value6, value7):
-#     if not n_clicks:
-#         return []
-#     valid, message = validate_inputs(value1, value2, value3, value4, value5, value6, value7)
-#     if not valid:
-#         raise dash.exceptions.PreventUpdate(message)
-#     new_row = [value1, value2, value3, value4, value5, value6, value7]
-#     df.loc[len(df)] = new_row
-#     stmt = text("""
-#         INSERT INTO mytable (First_Supervisor, Second_Supervisor, Main_Status, Student_Name, Gender, Colloquium_Date, Semester)
-#         VALUES (:First_Supervisor, :Second_Supervisor, :Main_Status, :Student_Name, :Gender, :Colloquium_Date, :Semester)
-#         """)
-#     connection.execute(stmt, First_Supervisor=value1, Second_Supervisor=value2, Main_Status=value3,
-#                        Student_Name=value4, Gender=value5, Colloquium_Date=value6, Semester=value7)
-#     return df.to_dict("rows")
-
-# if __name__ == '__main__':
-#     app.run_server(debug=True)

@@ -10,6 +10,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import pandas as pd
 import pathlib
+from dash.dependencies import Input, Output, State
 
 from sqlalchemy import create_engine
 # from sqlalchemy import inspect
@@ -38,16 +39,6 @@ session = Session()
 # as this is a small data set I will load the data once into a df instead of querying in callbacks
 df = pd.read_sql_table('mytable', ENGINE)
 
-# def generate_table(dataframe, max_rows=10):
-#     return html.Table(
-#         # Header
-#         [html.Tr([html.Th(col) for col in dataframe.columns])] +
-
-#         # Body
-#         [html.Tr([
-#             html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
-#         ]) for i in range(min(len(dataframe), max_rows))]
-#     )
 
 layout = html.Div([
 

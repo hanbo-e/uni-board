@@ -14,6 +14,8 @@ import pathlib
 from app import app
 
 from apps.db_manager import df
+#from apps.db_manager import df, ENGINE, Session, session
+
 
 layout = html.Div([
     html.H1('Thesis Supervision Hours', style={"textAlign": "center"}),
@@ -39,6 +41,8 @@ layout = html.Div([
                                                        'float':'left', 'width': '50%', 'text-align': 'center', 'border': '1px solid black', 'padding': '10px'}),
 html.Div(id='ancillary_count_card', children='', style={'display': 'inline', 
                                                         'float':'left', 'width': '50%', 'text-align': 'center', 'border': '1px solid black', 'padding': '10px'}),
+html.Div(id='update-df', children=''),
+#html.Button('Refresh Data', id='refresh-button'),
 
 ])
 
@@ -76,4 +80,4 @@ def display_results_2(semester_chosen, professor_chosen):
                            & (df_fltrd['Main_Status'] == 'Second')])
     main_count = rows_1 + rows_2
     ancillary_count = len(df_fltrd) - main_count
-    return html.H3('Total Main Supervisions: {}'.format(main_count)), html.H3('Total Ancillary Supervisions: {}'.format(ancillary_count))
+    return html.H3('Total Main Supervisions: {}'.format(main_count)), html.H3('Total Secondary Supervisions: {}'.format(ancillary_count))
