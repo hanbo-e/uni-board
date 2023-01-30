@@ -13,6 +13,8 @@ import pathlib
 
 from sqlalchemy import create_engine
 # from sqlalchemy import inspect
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
 
 from app import app
 
@@ -23,6 +25,9 @@ DATA_PATH = PATH.joinpath("../datasets/mydatabase.db").resolve()
 #ENGINE = create_engine('sqlite:///datasets/mydatabase.db')
 
 ENGINE = create_engine(f"sqlite:///{DATA_PATH}")
+
+Session = sessionmaker(bind=ENGINE)
+session = Session()
 
 # for checking db connection problems
 # connection = ENGINE.connect()
