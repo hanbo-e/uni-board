@@ -3,7 +3,7 @@
 Created on Tue Jan 24 08:30:41 2023
 
 @author: hanbo-e
-Based on helpful code and tutorial from here:
+Based on the following helpful code and tutorial:
 https://github.com/Coding-with-Adam/Dash-by-Plotly/tree/master/Deploy_App_to_Web/Multipage_App
 """
 
@@ -22,10 +22,10 @@ from apps import professors, data_entry, db_manager
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     html.Div([
-        dcc.Link('Thesis Supervision | ', href='/apps/professors'),
-        dcc.Link(' Data Entry Page | ', href='/apps/data_entry'),
+        dcc.Link('Thesis Supervision  | ', href='/apps/professors'),
+        dcc.Link('  Data Entry Page ', href='/apps/data_entry'),
         #dcc.Link(' Data Entry Page | ', href='/apps/data_entry2'),
-        dcc.Link(' Database Viewer | ', href='/apps/db_manager'),
+        #dcc.Link(' Database Viewer | ', href='/apps/db_manager'),
         #dcc.Link(' Test Ground', href='/apps/test')
     ], className="row"),
     html.Div(id='page-content', children=[])
@@ -40,8 +40,8 @@ def display_page(pathname):
         return professors.layout
     if pathname == '/apps/data_entry':
         return data_entry.layout
-    if pathname == '/apps/db_manager':
-        return db_manager.layout
+    # if pathname == '/apps/db_manager':
+    #     return db_manager.layout
     # if pathname == '/apps/test':
     #    return test.layout
     else:

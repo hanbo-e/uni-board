@@ -17,44 +17,76 @@ from apps.db_manager import df, ENGINE, Session, session
 #from apps.professors import df, ENGINE, Session, session
 from app import app
 
-layout = html.Div([ 
+layout = html.Div([
+    html.Br(),
+    html.H3("Last ten database entries:"),
     dash_table.DataTable(
         id='table',
         columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.tail(10).to_dict("rows"),
-        # style_data_conditional=[
-        #     {
-        #         'if': {'column_id': 'Colloquium_Date'},
-        #         'format': lambda x: x.strftime('%Y-%m-%d')
-        #     }
-        # ]
+        data=df.tail(10).to_dict("rows")
     ),
-    html.Button('Add Row', id='add-button'),
-    html.Label('First Supervisor'),
-    dcc.Input(id='input-box-1', type='text', value='', placeholder='Title. First Name Last Name'),
-    html.Label('Second Supervisor'),
-    dcc.Input(id='input-box-2', type='text', value='', placeholder="Title. First Name Last Name"),
-    html.Label('Main Supervisor'),
-    dcc.Dropdown(id='input-box-3', value='',
-                 options=[ {'label': 'First Supervisor is Main', 'value': 'First'},
-                          {'label': 'Second Supervisor is Main', 'value': 'Second'}]),
-    html.Label('Student Name'),
-    dcc.Input(id='input-box-4', type='text', value='', placeholder='First Name Last Name'),
-    html.Label('Gender'),
-    dcc.Dropdown(id='input-box-5',value='',
-                 options=[{'label': 'Male', 'value': 'male'}, 
-                                        {'label': 'Female', 'value': 'female'},
-                                        {'label': 'Other', 'value': 'other'}]),
-    html.Label('Colloquium Date'),
-
-    dcc.DatePickerSingle(
-    id='input-box-6', 
-    #date=datetime.datetime(2023, 1, 22), 
-    #display_format='YYYY-MM-DD'
-),
-
-    #dcc.Input(id='input-box-7', type='text', value=''),
+    html.Br(),
+    html.P("Fill in new colloquium information below and click on 'save to database':", style={
+        'margin':'10px',
+        'font-size':'18px'}),
+    html.Div(id='all-inputs-container', children=[
+        html.Div(children=[  
+        html.Label('First Supervisor'),
+        dcc.Input(id='input-box-1', type='text', value='', placeholder='Title. First Name Last Name')]
+        ),
+        
+        html.Div(children=[  
+        html.Label('Second Supervisor'),
+        dcc.Input(id='input-box-2', type='text', value='', placeholder="Title. First Name Last Name")]
+        ),
+        
+        html.Div(children=[  
+        html.Label('Main Supervisor'),
+        dcc.Dropdown(id='input-box-3', value='',
+                     options=[ {'label': 'First Supervisor is Main', 'value': 'First'},
+                              {'label': 'Second Supervisor is Main', 'value': 'Second'}],
+                     #style={'width':'14%'}
+                     )],  style={'width':'11%'}
+        ),
+        
+        html.Div(children=[ 
+        html.Label('Student Name'),
+        dcc.Input(id='input-box-4', type='text', value='', placeholder='First Name Last Name')]
+        ),
+        
+        html.Div(children=[ 
+        html.Label('Gender'),
+        dcc.Dropdown(id='input-box-5',value='',
+                     options=[{'label': 'Male', 'value': 'male'}, 
+                                            {'label': 'Female', 'value': 'female'},
+                                            {'label': 'Other', 'value': 'other'}],
+                     #style={'width':'100%'}
+                     )], style={'width':'11%'}
+        ),
+        
+        html.Div(children=[  
+        html.Label('Colloquium Date'),
+        dcc.DatePickerSingle(id='input-box-6',
+        min_date_allowed='2000-01-01'
+        )],style={"width":"14%"}),
+        
+        # html.Button('Add Row', id='add-button'),
+        ],
+        style={
+            "display": "flex",
+            "justify-content": "space-between",
+            "align-items": "center",
+            "padding": "15px",
+            "border": "1px solid black",
+            'border-radius': '10px'
+            }
+        ),
+    html.Br(),
+    html.Button('Save to Database', id='add-button', style={'width':'20%',
+                                                   'background': '#FEEECD',
+                                                   'margin':'10px'}),
 ])
+
 
 @app.callback(
     Output('table', 'data'),

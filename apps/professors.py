@@ -18,33 +18,68 @@ from apps.db_manager import df
 
 
 layout = html.Div([
-    html.H1('Thesis Supervision Hours', style={"textAlign": "center"}),
-
-    html.Div([
+    html.Br(),
+    html.Header(
+        html.H1('Thesis Supervision Hours')
+        ),
+    html.Br(),
+    html.H4('Please select a semeseter and a professor:', style={'text-align': 'left'}),
+    html.Div(id='button-container',
+             #style={'width': '90%'},
+             children = [
+        #html.Label('Select a Semester:'),
         html.Div(dcc.Dropdown(
-            id='semester-dropdown', value='Winter Semester 2022', clearable=False, # why is the default value not showing?
+            id='semester-dropdown', placeholder='Select a Semester', clearable=False,
             persistence=True, persistence_type='session',
             options=[{'label': x, 'value': x} for x in sorted(df.Semester.unique())]
-        ), className='six columns'),
-
+        ), className='six columns', style={'margin':'10px'}),
+        #html.Label('Select a Professor:'),
         html.Div(dcc.Dropdown(
-            id='professor-dropdown', value='Prof. B. F. Skinner', clearable=False,
-            persistence=True, persistence_type='session', #this controls if the last info clicked will stay the same
+            id='professor-dropdown', placeholder='Select a Professor', clearable=False,
+            persistence=True, persistence_type='session',
             options=[{'label': x, 'value': x} for x in sorted(df.First_Supervisor.unique())],
             searchable=True
-        ), className='six columns'),
+        ), className='six columns', style={'margin':'10px'}),
         
     ], className='row'),
-    
+    html.Br(),    
     html.Div(id='output-container',style={'padding':'10px'}),
-    html.Div(id='main_count_card', children='', style={'display': 'inline', 
-                                                       'float':'left', 'width': '50%', 'text-align': 'center', 'border': '1px solid black', 'padding': '10px'}),
-html.Div(id='ancillary_count_card', children='', style={'display': 'inline', 
-                                                        'float':'left', 'width': '50%', 'text-align': 'center', 'border': '1px solid black', 'padding': '10px'}),
-html.Div(id='update-df', children=''),
-#html.Button('Refresh Data', id='refresh-button'),
-
-])
+    html.Br(),
+    html.Div(id='card-container',
+             children=[
+                 html.Label('Total Main Supervisions for', style={'font-size': '18px'}),
+                 html.Div(id='main_count_card', children='',
+                          ),
+                 ],
+                          style={'display': 'inline', 
+                                'float':'left', 
+                                'width': '10%', 
+                                'text-align': 'center', 
+                                'border': '1px solid black', 
+                                'padding': '10px',
+                                'margin': '10px',
+                                'border-radius': '10px',
+                                'background':'#FEEECD'}
+            ),
+    html.Div(id='card-container-2',
+             children=[
+                 html.Label('Total Secondary Supervisions for', style={'font-size': '18px'}),
+                 html.Div(id='ancillary_count_card', children='',
+                          ),
+                 
+                 ],
+                          style={'display': 'inline', 
+                                'float':'left', 
+                                'width': '10%',
+                                #'width' : '',
+                                'text-align': 'center', 
+                                'border': '1px solid black', 
+                                'padding': '10px',
+                                'margin': '10px',
+                                'border-radius': '10px',
+                                'background':'#F6F9ED'}
+             ),
+], style={'width':'75%', 'margin':'0 auto', 'text-align': 'center'})
 
 
 
@@ -57,7 +92,14 @@ def display_results(semester_chosen, professor_chosen):
                      (df_fltrd['Second_Supervisor'].isin([professor_chosen]))]
     return html.Table(style={'margin':'auto','textAlign':'center','padding':'10px'}, children=[
         # Header
-        html.Tr([html.Th(col,style={'padding':'10px'}) for col in df_fltrd.columns]),
+        #html.Tr([html.Th(col,style={'padding':'10px'}) for col in df_fltrd.columns]),
+        html.Tr([html.Th(col,style={'padding':'10px'}) for col in ['First Supervisor',
+                                                                   'Second Supervisor',
+                                                                   'Main Supervisor',
+                                                                   'Student',
+                                                                   'Gender',
+                                                                   'Colloquium Date',
+                                                                   'Semester']]),
         # Body
         *[html.Tr([
             html.Td(df_fltrd.iloc[i][col],style={'padding':'10px'}) for col in df_fltrd.columns
@@ -80,4 +122,4 @@ def display_results_2(semester_chosen, professor_chosen):
                            & (df_fltrd['Main_Status'] == 'Second')])
     main_count = rows_1 + rows_2
     ancillary_count = len(df_fltrd) - main_count
-    return html.H3('Total Main Supervisions: {}'.format(main_count)), html.H3('Total Secondary Supervisions: {}'.format(ancillary_count))
+    return html.P(f"{professor_chosen}: {main_count}", style={'font-size': '20px'}), html.P(f"{professor_chosen}: {ancillary_count}", style={'font-size': '20px'})
