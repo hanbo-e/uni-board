@@ -30,19 +30,30 @@ layout = html.Div([
         # ]
     ),
     html.Button('Add Row', id='add-button'),
-    dcc.Input(id='input-box-1', type='text', value=''),
-    dcc.Input(id='input-box-2', type='text', value=''),
-    dcc.Input(id='input-box-3', type='text', value=''),
-    dcc.Input(id='input-box-4', type='text', value=''),
-    dcc.Input(id='input-box-5', type='text', value=''),
-    #dcc.Input(id='input-box-6', type='text', value=''),
+    html.Label('First Supervisor'),
+    dcc.Input(id='input-box-1', type='text', value='', placeholder='Title. First Name Last Name'),
+    html.Label('Second Supervisor'),
+    dcc.Input(id='input-box-2', type='text', value='', placeholder="Title. First Name Last Name"),
+    html.Label('Main Supervisor'),
+    dcc.Dropdown(id='input-box-3', value='',
+                 options=[ {'label': 'First Supervisor is Main', 'value': 'First'},
+                          {'label': 'Second Supervisor is Main', 'value': 'Second'}]),
+    html.Label('Student Name'),
+    dcc.Input(id='input-box-4', type='text', value='', placeholder='First Name Last Name'),
+    html.Label('Gender'),
+    dcc.Dropdown(id='input-box-5',value='',
+                 options=[{'label': 'Male', 'value': 'male'}, 
+                                        {'label': 'Female', 'value': 'female'},
+                                        {'label': 'Other', 'value': 'other'}]),
+    html.Label('Colloquium Date'),
+
     dcc.DatePickerSingle(
     id='input-box-6', 
     #date=datetime.datetime(2023, 1, 22), 
     #display_format='YYYY-MM-DD'
 ),
 
-    dcc.Input(id='input-box-7', type='text', value=''),
+    #dcc.Input(id='input-box-7', type='text', value=''),
 ])
 
 @app.callback(
@@ -53,21 +64,33 @@ layout = html.Div([
       State('input-box-3', 'value'),
       State('input-box-4', 'value'),
       State('input-box-5', 'value'),
-      State('input-box-6', 'date'),
-      State('input-box-7', 'value')]
+      State('input-box-6', 'date')
+      #State('input-box-7', 'value')
+      ]
 )
-def add_row(n_clicks, value1, value2, value3, value4, value5, value6, value7):
+def add_row(n_clicks, value1, value2, value3, value4, value5, value6):
     if n_clicks:
         #converted_date = pd.to_datetime(value6).strftime('%Y-%m-%dT%H:%M:%S')
         converted_date = datetime.date.fromisoformat(value6)
-        new_row = [value1, value2, value3, value4, value5, converted_date, value7]
+        #date = datetime.strptime(colloquium_value, '%Y-%m-%d')
+        semester = ''
+        if converted_date.month >= 4 and converted_date.month <= 9:
+            semester = f'Summer Semester {converted_date.year}'
+        else:
+            if converted_date.month > 9 or converted_date.month < 4:
+                if converted_date.month < 4:
+                    semester = f'Winter Semester {converted_date.year-1}'
+                else:
+                    semester = f'Winter Semester {converted_date.year}'
+        print(f'The calculated Semester is: {semester}')
+        new_row = [value1, value2, value3, value4, value5, converted_date, semester]
         df.loc[len(df)] = new_row
         stmt = text("""
             INSERT INTO mytable (First_Supervisor, Second_Supervisor, Main_Status, Student_Name, Gender, Colloquium_Date, Semester)
             VALUES (:First_Supervisor, :Second_Supervisor, :Main_Status, :Student_Name, :Gender, :Colloquium_Date, :Semester)
             """)
         session.execute(stmt, {"First_Supervisor": value1, "Second_Supervisor": value2, "Main_Status": value3, 
-                                "Student_Name": value4, "Gender": value5, "Colloquium_Date": converted_date, "Semester": value7})
+                                "Student_Name": value4, "Gender": value5, "Colloquium_Date": converted_date, "Semester": semester})
         session.commit()
         print('went into add row function')
     return df.tail(10).to_dict("rows")
