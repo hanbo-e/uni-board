@@ -16,6 +16,12 @@ from app import app
 from apps.db_manager import df
 #from apps.db_manager import df, ENGINE, Session, session
 
+fig = px.bar(df, x= "Semester")
+fig.update_layout(
+    yaxis_title="Number of Students",
+    title='Total Number of Supervisions per Semester',
+    title_x=0.5
+    )
 
 layout = html.Div([
     html.Br(),
@@ -45,40 +51,62 @@ layout = html.Div([
     html.Br(),    
     html.Div(id='output-container',style={'padding':'10px'}),
     html.Br(),
-    html.Div(id='card-container',
-             children=[
-                 html.Label('Total Main Supervisions for', style={'font-size': '18px'}),
-                 html.Div(id='main_count_card', children='',
-                          ),
-                 ],
-                          style={'display': 'inline', 
-                                'float':'left', 
-                                'width': '10%', 
-                                'text-align': 'center', 
-                                'border': '1px solid black', 
-                                'padding': '10px',
-                                'margin': '10px',
-                                'border-radius': '10px',
-                                'background':'#FEEECD'}
-            ),
-    html.Div(id='card-container-2',
-             children=[
-                 html.Label('Total Secondary Supervisions for', style={'font-size': '18px'}),
-                 html.Div(id='ancillary_count_card', children='',
-                          ),
-                 
-                 ],
-                          style={'display': 'inline', 
-                                'float':'left', 
-                                'width': '10%',
-                                #'width' : '',
-                                'text-align': 'center', 
-                                'border': '1px solid black', 
-                                'padding': '10px',
-                                'margin': '10px',
-                                'border-radius': '10px',
-                                'background':'#F6F9ED'}
-             ),
+    html.Div(id='cointainer-of-card-containers', children=[
+        html.Div(id='card-container',
+                 children=[
+                     html.Label('Total Main Supervisions for', style={'font-size': '18px'}),
+                     html.Div(id='main_count_card', children='',
+                              ),
+                     ],
+                              style={'display': 'inline', 
+                                    'float':'left', 
+                                    'width': '10%', 
+                                    'text-align': 'center', 
+                                    'border': '1px solid black', 
+                                    'padding': '10px',
+                                    'margin': '10px',
+                                    'border-radius': '10px',
+                                    'background':'#FEEECD'}
+                ),
+        html.Div(id='card-container-2',
+                 children=[
+                     html.Label('Total Secondary Supervisions for', style={'font-size': '18px'}),
+                     html.Div(id='ancillary_count_card', children='',
+                              ),
+                     
+                     ],
+                              style={'display': 'inline', 
+                                    'float':'left', 
+                                    'width': '10%',
+                                    #'width' : '',
+                                    'text-align': 'center', 
+                                    'border': '1px solid black', 
+                                    'padding': '10px',
+                                    'margin': '10px',
+                                    'border-radius': '10px',
+                                    'background':'#F6F9ED'}
+                 ),
+        #html.Br(),
+        html.Div([
+            dcc.Graph(id='my-bar', figure=fig)
+            ], 
+            style={'width':'75%',
+                      #'text-align':'center'
+                      #'float':'right'
+                      }
+                      ),
+        
+        ], 
+        style={
+            "display": "flex",
+            #"justify-content": "space-between",
+            "align-items": "center",
+            "padding": "10px",
+            #"border": "1px solid black",
+            #'border-radius': '10px'
+            }
+        ),
+    
 ], style={'width':'75%', 'margin':'0 auto', 'text-align': 'center'})
 
 
