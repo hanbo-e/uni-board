@@ -54,7 +54,7 @@ layout = html.Div([
     html.Div(id='cointainer-of-card-containers', children=[
         html.Div(id='card-container',
                  children=[
-                     html.Label('Total Main Supervisions for', style={'font-size': '18px'}),
+                     html.Label('Total Main Supervisions in Selected Semester for', style={'font-size': '13px'}),
                      html.Div(id='main_count_card', children='',
                               ),
                      ],
@@ -70,7 +70,7 @@ layout = html.Div([
                 ),
         html.Div(id='card-container-2',
                  children=[
-                     html.Label('Total Secondary Supervisions for', style={'font-size': '18px'}),
+                     html.Label('Total Secondary Supervisions in Selected Semesters for', style={'font-size': '13px'}),
                      html.Div(id='ancillary_count_card', children='',
                               ),
                      
@@ -151,3 +151,18 @@ def display_results_2(semester_chosen, professor_chosen):
     main_count = rows_1 + rows_2
     ancillary_count = len(df_fltrd) - main_count
     return html.P(f"{professor_chosen}: {main_count}", style={'font-size': '20px'}), html.P(f"{professor_chosen}: {ancillary_count}", style={'font-size': '20px'})
+
+@app.callback(
+    Output('my-bar', 'figure'),
+    [Input('professor-dropdown', 'value')]
+    )
+def display_bar_chart(professor_chosen):
+    df_fltrd = df[(df['First_Supervisor'].isin([professor_chosen])) | 
+                     (df['Second_Supervisor'].isin([professor_chosen]))]
+    bar_chart = px.bar(df_fltrd, x= "Semester")
+    bar_chart.update_layout(
+        yaxis_title="Number of Students",
+        title=f'Total Number of Supervisions per Semester for {professor_chosen}',
+        title_x=0.5
+        )
+    return bar_chart
