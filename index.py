@@ -19,24 +19,28 @@ from app import server
 from apps import professors, data_entry, db_manager
 
 
-app.layout = html.Div([
-    dcc.Location(id='url', refresh=False),
-    html.Div([
-        dcc.Link('Thesis Supervision  | ', href='/apps/professors'),
-        dcc.Link('  Data Entry Page ', href='/apps/data_entry'),
-        #dcc.Link(' Database Viewer | ', href='/apps/db_manager'),
-    ], className="row"),
-    html.Div(id='page-content', children=[])
-])
+app.layout = html.Div(
+    [
+        dcc.Location(id="url", refresh=False),
+        html.Div(
+            [
+                dcc.Link("Thesis Supervision  | ", href="/apps/professors"),
+                dcc.Link("  Data Entry Page ", href="/apps/data_entry"),
+                # dcc.Link(' Database Viewer | ', href='/apps/db_manager'),
+            ],
+            className="row",
+        ),
+        html.Div(id="page-content", children=[]),
+    ]
+)
 
 
-@app.callback(Output('page-content', 'children'),
-              [Input('url', 'pathname')])
+@app.callback(Output("page-content", "children"), [Input("url", "pathname")])
 def display_page(pathname):
 
-    if pathname == '/apps/professors':
+    if pathname == "/apps/professors":
         return professors.layout
-    if pathname == '/apps/data_entry':
+    if pathname == "/apps/data_entry":
         return data_entry.layout
     # if pathname == '/apps/db_manager':
     #     return db_manager.layout
@@ -46,6 +50,6 @@ def display_page(pathname):
         return professors.layout
 
 
-if __name__ == '__main__':
-    #app.run_server(debug=False)
-    app.run_server(host='127.0.0.1', port=8000)
+if __name__ == "__main__":
+    # app.run_server(debug=False)
+    app.run_server(host="127.0.0.1", port=8000)
