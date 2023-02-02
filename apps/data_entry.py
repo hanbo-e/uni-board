@@ -3,6 +3,7 @@ from dash.dependencies import Input, Output, State
 import dash_table
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.exceptions import PreventUpdate
 
 import pandas as pd
 import plotly.express as px
@@ -14,7 +15,7 @@ import datetime
 
 
 from apps.db_manager import df, ENGINE, Session, session
-#from apps.professors import df, ENGINE, Session, session
+
 from app import app
 
 layout = html.Div([
@@ -29,6 +30,7 @@ layout = html.Div([
     html.P("Fill in new colloquium information below and click on 'save to database':", style={
         'margin':'10px',
         'font-size':'18px'}),
+    html.H2(id='error-message', style={'color':'red', 'fontsize':'18px'}),
     html.Div(id='all-inputs-container', children=[
         html.Div(children=[  
         html.Label('First Supervisor'),
@@ -85,11 +87,13 @@ layout = html.Div([
     html.Button('Save to Database', id='add-button', style={'width':'20%',
                                                    'background': '#FEEECD',
                                                    'margin':'10px'}),
+    #html.Div(id='error-message', style={'color':'red'})
 ])
 
 
 @app.callback(
-    Output('table', 'data'),
+    [Output('table', 'data'),
+     Output('error-message', 'children')],
     [Input('add-button', 'n_clicks')],
     [State('input-box-1', 'value'),
       State('input-box-2', 'value'),
@@ -102,27 +106,70 @@ layout = html.Div([
 )
 def add_row(n_clicks, value1, value2, value3, value4, value5, value6):
     if n_clicks:
-        #converted_date = pd.to_datetime(value6).strftime('%Y-%m-%dT%H:%M:%S')
-        converted_date = datetime.date.fromisoformat(value6)
-        #date = datetime.strptime(colloquium_value, '%Y-%m-%d')
-        semester = ''
-        if converted_date.month >= 4 and converted_date.month <= 9:
-            semester = f'Summer Semester {converted_date.year}'
+        #print(f"value1 = {value1}")
+        if '' in [value1, value2, value3, value4, value5, value6]:
+            #raise PreventUpdate("All fields need to be filled")
+            return [df.tail(10).to_dict("rows"), "All fields need to be filled"]
         else:
-            if converted_date.month > 9 or converted_date.month < 4:
-                if converted_date.month < 4:
-                    semester = f'Winter Semester {converted_date.year-1}'
-                else:
-                    semester = f'Winter Semester {converted_date.year}'
-        print(f'The calculated Semester is: {semester}')
-        new_row = [value1, value2, value3, value4, value5, converted_date, semester]
-        df.loc[len(df)] = new_row
-        stmt = text("""
-            INSERT INTO mytable (First_Supervisor, Second_Supervisor, Main_Status, Student_Name, Gender, Colloquium_Date, Semester)
-            VALUES (:First_Supervisor, :Second_Supervisor, :Main_Status, :Student_Name, :Gender, :Colloquium_Date, :Semester)
-            """)
-        session.execute(stmt, {"First_Supervisor": value1, "Second_Supervisor": value2, "Main_Status": value3, 
-                                "Student_Name": value4, "Gender": value5, "Colloquium_Date": converted_date, "Semester": semester})
-        session.commit()
-        print('went into add row function')
-    return df.tail(10).to_dict("rows")
+            #converted_date = pd.to_datetime(value6).strftime('%Y-%m-%dT%H:%M:%S')
+            converted_date = datetime.date.fromisoformat(value6)
+            #date = datetime.strptime(colloquium_value, '%Y-%m-%d')
+            semester = ''
+            if converted_date.month >= 4 and converted_date.month <= 9:
+                semester = f'Summer Semester {converted_date.year}'
+            else:
+                if converted_date.month > 9 or converted_date.month < 4:
+                    if converted_date.month < 4:
+                        semester = f'Winter Semester {converted_date.year-1}'
+                    else:
+                        semester = f'Winter Semester {converted_date.year}'
+            print(f'The calculated Semester is: {semester}')
+            new_row = [value1, value2, value3, value4, value5, converted_date, semester]
+            df.loc[len(df)] = new_row
+            stmt = text("""
+                INSERT INTO mytable (First_Supervisor, Second_Supervisor, Main_Status, Student_Name, Gender, Colloquium_Date, Semester)
+                VALUES (:First_Supervisor, :Second_Supervisor, :Main_Status, :Student_Name, :Gender, :Colloquium_Date, :Semester)
+                """)
+            session.execute(stmt, {"First_Supervisor": value1, "Second_Supervisor": value2, "Main_Status": value3, 
+                                    "Student_Name": value4, "Gender": value5, "Colloquium_Date": converted_date, "Semester": semester})
+            session.commit()
+            print('went into add row function')
+    return df.tail(10).to_dict("rows"), ''
+# @app.callback(
+#     Output('table', 'data'),
+#     [Input('add-button', 'n_clicks')],
+#     [State('input-box-1', 'value'),
+#       State('input-box-2', 'value'),
+#       State('input-box-3', 'value'),
+#       State('input-box-4', 'value'),
+#       State('input-box-5', 'value'),
+#       State('input-box-6', 'date')
+#       #State('input-box-7', 'value')
+#       ]
+# )
+# def add_row(n_clicks, value1, value2, value3, value4, value5, value6):
+#     if n_clicks:
+#         #converted_date = pd.to_datetime(value6).strftime('%Y-%m-%dT%H:%M:%S')
+#         converted_date = datetime.date.fromisoformat(value6)
+#         #date = datetime.strptime(colloquium_value, '%Y-%m-%d')
+#         semester = ''
+#         if converted_date.month >= 4 and converted_date.month <= 9:
+#             semester = f'Summer Semester {converted_date.year}'
+#         else:
+#             if converted_date.month > 9 or converted_date.month < 4:
+#                 if converted_date.month < 4:
+#                     semester = f'Winter Semester {converted_date.year-1}'
+#                 else:
+#                     semester = f'Winter Semester {converted_date.year}'
+#         print(f'The calculated Semester is: {semester}')
+#         new_row = [value1, value2, value3, value4, value5, converted_date, semester]
+#         df.loc[len(df)] = new_row
+#         stmt = text("""
+#             INSERT INTO mytable (First_Supervisor, Second_Supervisor, Main_Status, Student_Name, Gender, Colloquium_Date, Semester)
+#             VALUES (:First_Supervisor, :Second_Supervisor, :Main_Status, :Student_Name, :Gender, :Colloquium_Date, :Semester)
+#             """)
+#         session.execute(stmt, {"First_Supervisor": value1, "Second_Supervisor": value2, "Main_Status": value3, 
+#                                 "Student_Name": value4, "Gender": value5, "Colloquium_Date": converted_date, "Semester": semester})
+#         session.commit()
+#         print('went into add row function')
+#     return df.tail(10).to_dict("rows")

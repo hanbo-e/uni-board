@@ -10,13 +10,15 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
+import numpy as np
 import pathlib
 from app import app
 
 from apps.db_manager import df
-#from apps.db_manager import df, ENGINE, Session, session
 
-fig = px.bar(df, x= "Semester")
+from dash.exceptions import PreventUpdate
+
+fig = px.bar(df, x= "Semester", color='Main_Status', barmode='stack')
 fig.update_layout(
     yaxis_title="Number of Students",
     title='Total Number of Supervisions per Semester',
@@ -70,7 +72,7 @@ layout = html.Div([
                 ),
         html.Div(id='card-container-2',
                  children=[
-                     html.Label('Total Secondary Supervisions in Selected Semesters for', style={'font-size': '13px'}),
+                     html.Label('Total Secondary Supervisions in Selected Semester for', style={'font-size': '13px'}),
                      html.Div(id='ancillary_count_card', children='',
                               ),
                      
@@ -152,17 +154,41 @@ def display_results_2(semester_chosen, professor_chosen):
     ancillary_count = len(df_fltrd) - main_count
     return html.P(f"{professor_chosen}: {main_count}", style={'font-size': '20px'}), html.P(f"{professor_chosen}: {ancillary_count}", style={'font-size': '20px'})
 
+# @app.callback(
+#     Output('my-bar', 'figure'),
+#     [Input('professor-dropdown', 'value')]
+#     )
+# def display_bar_chart(professor_chosen):
+#     if professor_chosen is None:
+#         raise PreventUpdate()
+#     else:
+#         df_fltrd = df[(df['First_Supervisor'].isin([professor_chosen])) | 
+#                          (df['Second_Supervisor'].isin([professor_chosen]))]
+#         bar_chart = px.bar(df_fltrd, x= "Semester", color='Main_Status', barmode='stack')
+#         bar_chart.update_layout(
+#             yaxis_title="Number of Students",
+#             title=f'Total Number of Supervisions per Semester for {professor_chosen}',
+#             title_x=0.5
+#             )
+#         return bar_chart
 @app.callback(
     Output('my-bar', 'figure'),
     [Input('professor-dropdown', 'value')]
     )
 def display_bar_chart(professor_chosen):
-    df_fltrd = df[(df['First_Supervisor'].isin([professor_chosen])) | 
-                     (df['Second_Supervisor'].isin([professor_chosen]))]
-    bar_chart = px.bar(df_fltrd, x= "Semester")
-    bar_chart.update_layout(
-        yaxis_title="Number of Students",
-        title=f'Total Number of Supervisions per Semester for {professor_chosen}',
-        title_x=0.5
-        )
-    return bar_chart
+    if professor_chosen is None:
+        raise PreventUpdate()
+    else:
+        df_fltrd = df[(df['First_Supervisor'].isin([professor_chosen])) | 
+                         (df['Second_Supervisor'].isin([professor_chosen]))]
+        df_fltrd['Main_Count'] = np.where((df_fltrd['Main_Status'] == 'First') 
+                                          & (df_fltrd['First_Supervisor'] == professor_chosen),
+                            'Main Supervisor',
+                            'Secondary Supervisor')
+        bar_chart = px.bar(df_fltrd, x= "Semester", color='Main_Count', barmode='stack')
+        bar_chart.update_layout(
+            yaxis_title="Number of Students",
+            title=f'Total Number of Supervisions per Semester for {professor_chosen}',
+            title_x=0.5
+            )
+        return bar_chart
