@@ -18,7 +18,7 @@ from apps.db_manager import df
 
 from dash.exceptions import PreventUpdate
 
-fig = px.bar(df, x="Semester", color="Main_Status", barmode="stack")
+fig = px.bar(df, x="Semester")
 fig.update_layout(
     yaxis_title="Number of Students",
     title="Total Number of Supervisions per Semester",
