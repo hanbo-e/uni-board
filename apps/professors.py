@@ -35,13 +35,11 @@ layout = html.Div([
     html.Div(id='button-container',
              #style={'width': '90%'},
              children = [
-        #html.Label('Select a Semester:'),
         html.Div(dcc.Dropdown(
             id='semester-dropdown', placeholder='Select a Semester', clearable=False,
             persistence=True, persistence_type='session',
             options=[{'label': x, 'value': x} for x in sorted(df.Semester.unique())]
         ), className='six columns', style={'margin':'10px'}),
-        #html.Label('Select a Professor:'),
         html.Div(dcc.Dropdown(
             id='professor-dropdown', placeholder='Select a Professor', clearable=False,
             persistence=True, persistence_type='session',
@@ -88,13 +86,11 @@ layout = html.Div([
                                     'border-radius': '10px',
                                     'background':'#F6F9ED'}
                  ),
-        #html.Br(),
         html.Div([
             dcc.Graph(id='my-bar', figure=fig)
             ], 
             style={'width':'75%',
-                      #'text-align':'center'
-                      #'float':'right'
+
                       }
                       ),
         
@@ -121,8 +117,7 @@ def display_results(semester_chosen, professor_chosen):
     df_fltrd = df_fltrd[(df_fltrd['First_Supervisor'].isin([professor_chosen])) | 
                      (df_fltrd['Second_Supervisor'].isin([professor_chosen]))]
     return html.Table(style={'margin':'auto','textAlign':'center','padding':'10px'}, children=[
-        # Header
-        #html.Tr([html.Th(col,style={'padding':'10px'}) for col in df_fltrd.columns]),
+        #Header
         html.Tr([html.Th(col,style={'padding':'10px'}) for col in ['First Supervisor',
                                                                    'Second Supervisor',
                                                                    'Main Supervisor',
@@ -154,23 +149,7 @@ def display_results_2(semester_chosen, professor_chosen):
     ancillary_count = len(df_fltrd) - main_count
     return html.P(f"{professor_chosen}: {main_count}", style={'font-size': '20px'}), html.P(f"{professor_chosen}: {ancillary_count}", style={'font-size': '20px'})
 
-# @app.callback(
-#     Output('my-bar', 'figure'),
-#     [Input('professor-dropdown', 'value')]
-#     )
-# def display_bar_chart(professor_chosen):
-#     if professor_chosen is None:
-#         raise PreventUpdate()
-#     else:
-#         df_fltrd = df[(df['First_Supervisor'].isin([professor_chosen])) | 
-#                          (df['Second_Supervisor'].isin([professor_chosen]))]
-#         bar_chart = px.bar(df_fltrd, x= "Semester", color='Main_Status', barmode='stack')
-#         bar_chart.update_layout(
-#             yaxis_title="Number of Students",
-#             title=f'Total Number of Supervisions per Semester for {professor_chosen}',
-#             title_x=0.5
-#             )
-#         return bar_chart
+
 @app.callback(
     Output('my-bar', 'figure'),
     [Input('professor-dropdown', 'value')]
