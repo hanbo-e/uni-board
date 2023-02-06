@@ -28,7 +28,7 @@ fig.update_layout(
 layout = html.Div(
     [
         html.Br(),
-        html.Header(html.H1("Thesis Supervision Hours")),
+        html.Header(html.H1("Thesis Supervision Hours"), style={"text-align":"left"}),
         html.Br(),
         html.H4(
             "Please select a semeseter and a professor:", style={"text-align": "left"}
@@ -72,7 +72,7 @@ layout = html.Div(
             className="row",
         ),
         html.Br(),
-        html.Div(id="output-container", style={"padding": "10px"}),
+        #html.Div(id="output-container", style={"padding": "10px"}),
         html.Br(),
         html.Div(
             id="cointainer-of-card-containers",
@@ -90,7 +90,7 @@ layout = html.Div(
                         "display": "inline",
                         "float": "left",
                         "width": "10%",
-                        "text-align": "center",
+                        "text-align": "left",
                         "border": "1px solid black",
                         "padding": "10px",
                         "margin": "10px",
@@ -98,6 +98,7 @@ layout = html.Div(
                         "background": "#FEEECD",
                     },
                 ),
+                #html.Br(),
                 html.Div(
                     id="card-container-2",
                     children=[
@@ -112,7 +113,7 @@ layout = html.Div(
                         "float": "left",
                         "width": "10%",
                         #'width' : '',
-                        "text-align": "center",
+                        "text-align": "left",
                         "border": "1px solid black",
                         "padding": "10px",
                         "margin": "10px",
@@ -120,19 +121,25 @@ layout = html.Div(
                         "background": "#F6F9ED",
                     },
                 ),
-                html.Div([dcc.Graph(id="my-bar", figure=fig)], style={"width": "75%",}),
+                html.Div([dcc.Graph(id="my-bar", figure=fig)], style={"width": "75%", "float":"right",
+                                                                      "border":"1px solid black"}),
+                
             ],
             style={
                 "display": "flex",
                 # "justify-content": "space-between",
                 "align-items": "center",
-                "padding": "10px",
+                #"padding": "10px",
                 # "border": "1px solid black",
                 #'border-radius': '10px'
             },
         ),
+        #html.Div([dcc.Graph(id="my-bar", figure=fig)], style={"width": "75%", "float":"right"}),
+        html.Br(),
+        html.Div(id="output-container", style={"padding": "10px", "float":"left"}),
+        html.Br(),
     ],
-    style={"width": "75%", "margin": "0 auto", "text-align": "center"},
+    style={"width": "75%", "margin": "0 auto", "text-align": "center"},#align left?
 )
 
 
@@ -234,6 +241,6 @@ def display_bar_chart(professor_chosen):
         bar_chart.update_layout(
             yaxis_title="Number of Students",
             title=f"Total Number of Supervisions per Semester for {professor_chosen}",
-            title_x=0.5,
+            title_x=0.05,
         )
         return bar_chart

@@ -18,21 +18,33 @@ from apps.db_manager import df, ENGINE, Session, session
 
 from app import app
 
+#df_temp = df.tail(10)
+#df_temp['Colloquium_Date'] = pd.to_datetime(df_temp['Colloquium_Date'])
+#df_temp['Colloquium_Date'] = df_temp['Colloquium_Date'].dt.strftime('%Y-%m-%d')
+#print(df_temp.dtypes)
+
 layout = html.Div(
     [
         html.Br(),
-        html.H3("Last ten database entries:"),
+        html.H3("Last ten database entries:", style = {"text-align":"left"}),
         dash_table.DataTable(
             id="table",
             columns=[{"name": i, "id": i} for i in df.columns],
+            #data = df_temp.to_dict("rows"),
             data=df.tail(10).to_dict("rows"),
+            # style_data_conditional=[
+            #     {
+            #         'if': {'column_id': 'Colloquium_Date'},
+            #         'format': {'value': '{:%Y-%m-%d}'.format}
+            #     }
+            # ],            
         ),
         html.Br(),
         html.P(
             "Fill in new colloquium information below and click on 'save to database':",
-            style={"margin": "10px", "font-size": "18px"},
+            style={"margin": "10px", "font-size": "18px", "text-align":"left"},
         ),
-        html.H2(id="error-message", style={"color": "red", "fontsize": "18px"}),
+        html.H2(id="error-message", style={"color": "red", "fontsize": "18px", "text-align":"left"}),
         html.Div(
             id="all-inputs-container",
             children=[
@@ -68,13 +80,13 @@ layout = html.Div(
                                 {"label": "First Supervisor is Main", "value": "First"},
                                 {
                                     "label": "Second Supervisor is Main",
-                                    "value": "Second",
+                                    "value": "",
                                 },
                             ],
                             # style={'width':'14%'}
                         ),
                     ],
-                    style={"width": "11%"},
+                    style={"width": "15%"},
                 ),
                 html.Div(
                     children=[
@@ -115,7 +127,7 @@ layout = html.Div(
             ],
             style={
                 "display": "flex",
-                "justify-content": "space-between",
+                "justify-content": "space-around",
                 "align-items": "center",
                 "padding": "15px",
                 "border": "1px solid black",
@@ -126,7 +138,7 @@ layout = html.Div(
         html.Button(
             "Save to Database",
             id="add-button",
-            style={"width": "20%", "background": "#FEEECD", "margin": "10px"},
+            style={"width": "20%", "background": "#FEEECD", "margin": "10px", "float":"left"},
         ),
     ]
 )

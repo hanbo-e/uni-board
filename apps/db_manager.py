@@ -12,6 +12,8 @@ import pandas as pd
 import pathlib
 from dash.dependencies import Input, Output, State
 
+import datetime
+
 from sqlalchemy import create_engine
 
 # from sqlalchemy import inspect
@@ -38,7 +40,9 @@ session = Session()
 # print(inspector.get_table_names())
 
 # as this is a small data set I will load the data once into a df instead of querying in callbacks
-df = pd.read_sql_table("mytable", ENGINE)
-
-
+df  = pd.read_sql_table("mytable", ENGINE)
+#df["Colloquium_Date"] = df["Colloquium_Date"].dt.date
+#print(df["Colloquium_Date"].head())
+#df["Colloquium_Date"] = df['Colloquium_Date'].dt.strftime('%Y-%m-%d')
+# df = pd.read_sql_table("mytable", ENGINE, parse_dates={"Colloquium_Date" : {"format":"%Y-%m-%d'"}})
 layout = html.Div([])

@@ -29,9 +29,15 @@ app.layout = html.Div(
                 # dcc.Link(' Database Viewer | ', href='/apps/db_manager'),
             ],
             className="row",
+            style={"text-align":"right", 
+                   "padding-right":"15%"
+                   }
         ),
         html.Div(id="page-content", children=[]),
-    ]
+    ], 
+    style={"text-align":"right", 
+           #"padding-right":"100px"
+           }
 )
 
 
@@ -51,5 +57,5 @@ def display_page(pathname):
 
 
 if __name__ == "__main__":
-    # app.run_server(debug=False)
+    #app.run_server(debug=True)
     app.run_server(host="127.0.0.1", port=8000)
