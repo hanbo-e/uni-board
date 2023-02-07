@@ -18,11 +18,6 @@ from apps.db_manager import df, ENGINE, Session, session
 
 from app import app
 
-#df_temp = df.tail(10)
-#df_temp['Colloquium_Date'] = pd.to_datetime(df_temp['Colloquium_Date'])
-#df_temp['Colloquium_Date'] = df_temp['Colloquium_Date'].dt.strftime('%Y-%m-%d')
-#print(df_temp.dtypes)
-
 layout = html.Div(
     [
         html.Br(),
@@ -30,14 +25,7 @@ layout = html.Div(
         dash_table.DataTable(
             id="table",
             columns=[{"name": i, "id": i} for i in df.columns],
-            #data = df_temp.to_dict("rows"),
-            data=df.tail(10).to_dict("rows"),
-            # style_data_conditional=[
-            #     {
-            #         'if': {'column_id': 'Colloquium_Date'},
-            #         'format': {'value': '{:%Y-%m-%d}'.format}
-            #     }
-            # ],            
+            data=df.tail(10).to_dict("rows"),         
         ),
         html.Br(),
         html.P(
@@ -83,7 +71,6 @@ layout = html.Div(
                                     "value": "",
                                 },
                             ],
-                            # style={'width':'14%'}
                         ),
                     ],
                     style={"width": "15%"},
@@ -110,7 +97,6 @@ layout = html.Div(
                                 {"label": "Female", "value": "female"},
                                 {"label": "Other", "value": "other"},
                             ],
-                            # style={'width':'100%'}
                         ),
                     ],
                     style={"width": "11%"},

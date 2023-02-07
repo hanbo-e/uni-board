@@ -31,11 +31,10 @@ layout = html.Div(
         html.Header(html.H1("Thesis Supervision Hours"), style={"text-align":"left"}),
         html.Br(),
         html.H4(
-            "Please select a semeseter and a professor:", style={"text-align": "left"}
+            "Please select a semester and a professor:", style={"text-align": "left"}
         ),
         html.Div(
             id="button-container",
-            # style={'width': '90%'},
             children=[
                 html.Div(
                     dcc.Dropdown(
@@ -98,7 +97,6 @@ layout = html.Div(
                         "background": "#FEEECD",
                     },
                 ),
-                #html.Br(),
                 html.Div(
                     id="card-container-2",
                     children=[
@@ -122,19 +120,16 @@ layout = html.Div(
                     },
                 ),
                 html.Div([dcc.Graph(id="my-bar", figure=fig)], style={"width": "75%", "float":"right",
-                                                                      "border":"1px solid black"}),
+                                                                      #"border":"1px solid black",
+                                                                      }),
                 
             ],
             style={
                 "display": "flex",
                 # "justify-content": "space-between",
                 "align-items": "center",
-                #"padding": "10px",
-                # "border": "1px solid black",
-                #'border-radius': '10px'
             },
         ),
-        #html.Div([dcc.Graph(id="my-bar", figure=fig)], style={"width": "75%", "float":"right"}),
         html.Br(),
         html.Div(id="output-container", style={"padding": "10px", "float":"left"}),
         html.Br(),
