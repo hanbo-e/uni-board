@@ -28,7 +28,7 @@ fig.update_layout(
 layout = html.Div(
     [
         html.Br(),
-        html.Header(html.H1("Thesis Supervision Hours"), style={"text-align":"left"}),
+        html.Header(html.H1("Thesis Supervision Hours"), style={"text-align": "left"}),
         html.Br(),
         html.H4(
             "Please select a semester and a professor:", style={"text-align": "left"}
@@ -71,7 +71,7 @@ layout = html.Div(
             className="row",
         ),
         html.Br(),
-        #html.Div(id="output-container", style={"padding": "10px"}),
+        # html.Div(id="output-container", style={"padding": "10px"}),
         html.Br(),
         html.Div(
             id="cointainer-of-card-containers",
@@ -119,10 +119,14 @@ layout = html.Div(
                         "background": "#F6F9ED",
                     },
                 ),
-                html.Div([dcc.Graph(id="my-bar", figure=fig)], style={"width": "75%", "float":"right",
-                                                                      #"border":"1px solid black",
-                                                                      }),
-                
+                html.Div(
+                    [dcc.Graph(id="my-bar", figure=fig)],
+                    style={
+                        "width": "75%",
+                        "float": "right",
+                        # "border":"1px solid black",
+                    },
+                ),
             ],
             style={
                 "display": "flex",
@@ -131,10 +135,10 @@ layout = html.Div(
             },
         ),
         html.Br(),
-        html.Div(id="output-container", style={"padding": "10px", "float":"left"}),
+        html.Div(id="output-container", style={"padding": "10px", "float": "left"}),
         html.Br(),
     ],
-    style={"width": "75%", "margin": "0 auto", "text-align": "center"},#align left?
+    style={"width": "75%", "margin": "0 auto", "text-align": "center"},  # align left?
 )
 
 

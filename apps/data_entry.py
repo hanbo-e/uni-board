@@ -21,18 +21,21 @@ from app import app
 layout = html.Div(
     [
         html.Br(),
-        html.H3("Last ten database entries:", style = {"text-align":"left"}),
+        html.H3("Last ten database entries:", style={"text-align": "left"}),
         dash_table.DataTable(
             id="table",
             columns=[{"name": i, "id": i} for i in df.columns],
-            data=df.tail(10).to_dict("rows"),         
+            data=df.tail(10).to_dict("rows"),
         ),
         html.Br(),
         html.P(
             "Fill in new colloquium information below and click on 'save to database':",
-            style={"margin": "10px", "font-size": "18px", "text-align":"left"},
+            style={"margin": "10px", "font-size": "18px", "text-align": "left"},
         ),
-        html.H2(id="error-message", style={"color": "red", "fontsize": "18px", "text-align":"left"}),
+        html.H2(
+            id="error-message",
+            style={"color": "red", "fontsize": "18px", "text-align": "left"},
+        ),
         html.Div(
             id="all-inputs-container",
             children=[
@@ -66,10 +69,7 @@ layout = html.Div(
                             value="",
                             options=[
                                 {"label": "First Supervisor is Main", "value": "First"},
-                                {
-                                    "label": "Second Supervisor is Main",
-                                    "value": "",
-                                },
+                                {"label": "Second Supervisor is Main", "value": "",},
                             ],
                         ),
                     ],
@@ -124,7 +124,12 @@ layout = html.Div(
         html.Button(
             "Save to Database",
             id="add-button",
-            style={"width": "20%", "background": "#FEEECD", "margin": "10px", "float":"left"},
+            style={
+                "width": "20%",
+                "background": "#FEEECD",
+                "margin": "10px",
+                "float": "left",
+            },
         ),
     ]
 )
