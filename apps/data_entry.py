@@ -59,7 +59,7 @@ layout = html.Div(
                             value="",
                             placeholder="Title. First Name Last Name",
                         ),
-                    ]
+                    ] 
                 ),
                 html.Div(
                     children=[
@@ -69,7 +69,7 @@ layout = html.Div(
                             value="",
                             options=[
                                 {"label": "First Supervisor is Main", "value": "First"},
-                                {"label": "Second Supervisor is Main", "value": "",},
+                                {"label": "Second Supervisor is Main", "value": "Second",},
                             ],
                         ),
                     ],
